@@ -3,7 +3,7 @@
     <header-title></header-title>
     <div class="body">
       <div class="sider">
-        <img class="cursor" src="../../assets/imgs/sider.png" alt="sider">
+        <img class="cursor" src="../../assets/imgs/sider.png" alt="sider" @click="openSider">
         <div class="sider-right">
           <div class="color-box">
             <div class="color-item null " :style="{backgroundColor:'#03dab9'}"></div>
@@ -150,10 +150,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="large-row-pass ">
-      <span class="pass">通</span>
-      <span class="pass">道</span>
-    </div> -->
     <div class="footer">
       <div class="ft-left">
         <span>剪袋子</span>
@@ -165,7 +161,7 @@
       </div>
     </div>
     <searchModal v-if="searchIsOpen" :searchIsOpen="searchIsOpen" @closeSearch="closeSearchModal"></searchModal>
-    <siderModal v-if="siderIsOpen"></siderModal>
+    <siderModal v-if="siderIsOpen" :siderIsOpen="siderIsOpen" @closeSider="closeSiderModal"></siderModal>
   </div>
 </template>
 <script>
@@ -173,6 +169,10 @@ import headerTitle from "../layout/header";
 import searchModal from './components/searchModal';
 import siderModal from "./components/siderModal"
 export default {
+  created(){
+    this.searchIsOpen=false;
+    this.siderIsOpen=false;
+  },
   data(){
     return {
       searchIsOpen:false,
@@ -269,7 +269,7 @@ export default {
             code:"13PLQ052",
             color:"default"
           }
-        ],
+      ],
       cpRow2:[
           {
             code:"13PLQ035",
@@ -306,8 +306,8 @@ export default {
             code:"13PLQ043",
             color:"default"
           }
-        ],
-        cpRow3:[
+      ],
+      cpRow3:[
           {
             code:"13PLQ026",
             color:"default"
@@ -376,8 +376,8 @@ export default {
             code:"13PLQ025",
             color:"default"
           }
-        ],  
-        cpRow4:[
+      ],  
+      cpRow4:[
           {
             code:"13PLQ009",
             color:"default"
@@ -479,7 +479,7 @@ export default {
             code:"13PLQ057",
             color:"default"
           },
-        ],
+      ],
       tableList:{
         card1:[
           {
@@ -589,6 +589,14 @@ export default {
     // 关闭搜索框
     closeSearchModal(data){
       this.searchIsOpen=data;
+    },
+    // 打开侧边栏
+    openSider(){
+      this.siderIsOpen=true;
+    },
+    // 关闭侧边栏
+    closeSiderModal(data){
+      this.siderIsOpen=data;
     }
   }
 }

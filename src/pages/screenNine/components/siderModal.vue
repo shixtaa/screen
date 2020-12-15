@@ -2,7 +2,7 @@
   <div class="sider-modal">
     <div class="left-sider">
       <div class="sider-header">
-        <img src="../../../assets/imgs/shrink.png" alt="shrink">
+        <img src="../../../assets/imgs/shrink.png" alt="shrink" @click="shrink">
       </div>
       <div class="sider-table">
         <el-table
@@ -57,71 +57,87 @@
 </template>
 <script>
 export default {
-  data() {
-      return {
-        tableData: [{
-          NO: '1',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }, {
-          NO: '2',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }, {
-          NO: '3',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }, {
-          NO: '4',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }, {
-          NO: '5',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }, {
-          NO: '6',
-          IN_Time: '12.03 08:00:00',
-          MO_NO: '20202014512',
-          ERP_NO:'20202014512',
-          name:"某某某",
-          count:11,
-          supplier:'某某某',
-          IN_Location:"13BLP001",
-          quality:'11'
-        }]
-      }
+  props:{
+    siderIsOpen:{
+      type:Boolean,
+      required:true
     }
+  },
+  data() {
+    return {
+      isOpen:false,
+      tableData: [{
+        NO: '1',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }, {
+        NO: '2',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }, {
+        NO: '3',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }, {
+        NO: '4',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }, {
+        NO: '5',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }, {
+        NO: '6',
+        IN_Time: '12.03 08:00:00',
+        MO_NO: '20202014512',
+        ERP_NO:'20202014512',
+        name:"某某某",
+        count:11,
+        supplier:'某某某',
+        IN_Location:"13BLP001",
+        quality:'11'
+      }]
+    }
+  },
+  created(){
+    this.isOpen=this.siderIsOpen;
+  },
+  methods:{
+    shrink(){
+      this.isOpen=false;
+      this.$emit('closeSider',false)
+    }
+  }
 }
 </script>
 <style lang="scss">
