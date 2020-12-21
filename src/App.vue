@@ -284,6 +284,9 @@ export default {
     background-color: #082443;
     color:#fff;
   }
+  .el-table::before {
+    height:0 !important;
+  }
   .el-table tbody tr:hover>td { 
     background-color:rgba(255,255,255,0.3)!important;
   }
