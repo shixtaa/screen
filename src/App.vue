@@ -48,54 +48,54 @@ export default {
             name: this.$route.meta.next,
           });
           break;
-        case 49:
-        case 97:
-          this.$router.push({
-            name: "screenFirst",
-          });
-          break;
-        case 50:
-        case 98:
-          this.$router.push({
-            name: "screenSecond",
-          });
-          break;
-        case 51:
-        case 99:
-          this.$router.push({
-            name: "screenThird",
-          });
-          break;
-        case 52:
-        case 100:
-          this.$router.push({
-            name: "screenFourth",
-          });
-          break;
-        case 53:
-        case 101:
-          this.$router.push({
-            name: "screenFive",
-          });
-          break;
-        case 54:
-        case 102:
-          this.$router.push({
-            name: "screenSix",
-          });
-          break;
-        case 55:
-        case 103:
-          this.$router.push({
-            name: "screenSeven",
-          });
-          break;
-        case 56:
-        case 104:
-          this.$router.push({
-            name: "screenEight",
-          });
-          break;
+        // case 49:
+        // case 97:
+        //   this.$router.push({
+        //     name: "screenFirst",
+        //   });
+        //   break;
+        // case 50:
+        // case 98:
+        //   this.$router.push({
+        //     name: "screenSecond",
+        //   });
+        //   break;
+        // case 51:
+        // case 99:
+        //   this.$router.push({
+        //     name: "screenThird",
+        //   });
+        //   break;
+        // case 52:
+        // case 100:
+        //   this.$router.push({
+        //     name: "screenFourth",
+        //   });
+        //   break;
+        // case 53:
+        // case 101:
+        //   this.$router.push({
+        //     name: "screenFive",
+        //   });
+        //   break;
+        // case 54:
+        // case 102:
+        //   this.$router.push({
+        //     name: "screenSix",
+        //   });
+        //   break;
+        // case 55:
+        // case 103:
+        //   this.$router.push({
+        //     name: "screenSeven",
+        //   });
+        //   break;
+        // case 56:
+        // case 104:
+        //   this.$router.push({
+        //     name: "screenEight",
+        //   });
+        //   break;
       }
     });
   },
@@ -272,4 +272,43 @@ export default {
     transform: scale(1);
   }
 }
+</style>
+
+<style lang="scss">
+//table样式
+  .el-table .single{
+    background-color: #001d3d;
+    color:#fff;
+  }
+  .el-table .double{
+    background-color: #082443;
+    color:#fff;
+  }
+  .el-table tbody tr:hover>td { 
+    background-color:rgba(255,255,255,0.3)!important;
+  }
+  .el-table td,.el-table th {
+    text-align: center !important;
+    color: #fff;
+    border: none !important;
+  }
+  //暂无数据
+  .el-table__empty-block{
+    background-color: #001d3d;
+    .el-table__empty-text{
+      color: #fff;
+    }
+  }
+  //table 滚动条样式
+  .el-table__body-wrapper{
+    background-color: #001d3d;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar {
+    width: 10px !important;
+  }
+
+  .el-table__body-wrapper::-webkit-scrollbar-thumb{
+      border-radius: 3px;
+      background-color: rgba(255,255,255,0.2);
+  }
 </style>

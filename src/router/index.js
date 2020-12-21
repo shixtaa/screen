@@ -14,7 +14,7 @@ export default new Router({
             path: '/one',
             name: 'screenFirst',
             component: () => import('../pages/screenFirst'),
-            meta: { type: 0, prev: "screenNine", next: 'screenSecond', index: 1 }
+            meta: { type: 0, prev: "screenEight", next: 'screenSecond', index: 1 }
         }, {
             path: '/two',
             name: 'screenSecond',
@@ -52,13 +52,7 @@ export default new Router({
             path: '/eight',
             name: 'screenEight',
             component: () => import('../pages/screenEight'),
-            meta: { prev: "screenSeven", next: "screenNine", index: 8 }
-        },
-        {
-            path: '/nine',
-            name: 'screenNine',
-            component: () => import('../pages/screenNine'),
-            meta: { prev: "screenEight", next: "screenFirst", index: 9 }
+            meta: { type: 5,prev: "screenSeven", next: "screenFirst", index: 8 }
         }
     ]
 })

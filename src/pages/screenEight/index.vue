@@ -1,560 +1,817 @@
 <template>
   <div class="layout">
     <header-title></header-title>
-    <div class="body">
-      <div class="sider">
-        <img src="../../assets/imgs/sider.png" alt="">
+    <div class="sider">
+      <img class="cursor" src="../../assets/imgs/sider.png" alt="sider" @click="openSider">
+      <div class="sider-right">
+        <div class="color-box">
+          <div class="color-item  nullColor " ></div>
+          <span>空</span>
+          <div class="color-item  notNullColor" ></div>
+          <span>非空</span>
+          <div class="color-item  strangeColor" ></div>
+          <span>异常</span>
+        </div>
+        <div class="search">
+          <img  class="search cursor" src="../../assets/imgs/search.png" alt="search" @click="openSearch">
+        </div>
       </div>
-      <div class="panel-content">
-        <div class="left-panel">
-          <div class="lp-col1">
-            <div class="c1-top">
-              <div class="c1-top-box"  v-for="(item,index) in col1List" :key="index">
-                <div class="save-box">
-                  <span>物料车存放区</span>
+    </div>
+    <div class="body">
+      <div class="panel-content row-flex">
+        <div class="left-content col-flex">
+          <div class="left-content-top row-flex">
+            <div class="left-panel row-flex">
+              <div class="lp-col1 col-flex">
+                <div class="c1-top col-flex">
+                  <div class="c1-top-box"  v-for="(item,index) in col1List" :key="index">
+                    <div class="save-box row-center-flex">
+                      <span>物料车存放区</span>
+                    </div>
+                    <div class="row-pass row-center-flex"  v-if="index!==5">
+                      <span class="pass">过</span>
+                      <span class="pass">道</span>
+                    </div>
+                  </div>
+                  
                 </div>
-                <p class="row-pass"  v-if="index!==5">
-                  <span class="pass">过</span>
-                  <span class="pass">道</span>
-                </p>
+                <div class="c1-ft">
+                  <div :class="['c1-ft-box', 'col-center-flex', 'cursor',item.code,'position'] "  v-for="item in positionData.lpFtPosition" :key="item.code" @click="()=>{openProModal(item.code)}">
+                    <div>{{item.code}}</div>
+                    <p>
+                      <span>{{item.name}}</span><br>
+                      <span>{{item.remark}}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
               
             </div>
-            <div class="c1-ft">
-              <div class="c1-ft-box">
-                <div>13PLQ068</div>
-                <p>
-                  <span>临时周转区</span><br>
-                  <span>(导杆顶块木箱类)</span>
-                </p>
-              </div>
-              <div class="c1-ft-box">
-                <div>13ZPL001</div>
-                <p>
-                  <span>装配物料分拣区</span>
-                </p>
-              </div>
+            <div class="col-pass width6">
+              <span>通</span>
+              <span>道</span>
             </div>
-          </div>
-          
-        </div>
-        <div class="col-pass">
-          <span>通</span>
-          <span>道</span>
-        </div>
-        <div class="center-panel">
-            <div class="cp-top">
-              <div class="cp-top-col1">
-                <div class="cp-top-col1-box"  v-for="(item,index) in cpColumn1" :key="item.code">
-                  <div class="turnover-box">
-                    <span>{{item.code}}</span>
-                    <span>{{item.name}}</span>
+            <div class="center-panel col-flex ">
+                <div class="cp-top row-flex">
+                  <div class="cp-top-col1 col-flex">
+                    <div :class="['cp-top-col1-box']"   v-for="(item,index) in positionData.cpTopCol1" :key="item.code" @click="()=>{openProModal(item.code)}">
+                      <div :class="['row-center-flex','turnover-box','position', 'cursor',item.code]"  >
+                        <span>{{item.code}}</span>
+                        <span>{{item.name}}</span>
+                      </div>
+                      <div class="row-pass "  v-if="index!==5">
+                        <span class="pass">过</span>
+                        <span class="pass">道</span>
+                      </div>
+                    </div>
                   </div>
-                  <p class="row-pass"  v-if="index!==5">
-                    <span class="pass">过</span>
-                    <span class="pass">道</span>
-                  </p>
-                  </div>
-              </div>
-              <div class="cp-top-col2">
-                <div class=" cp-top-box cp-top-box1">
-                  <div>13BLP001</div>
-                  <p>
-                    <span>不良品区</span>
-                  </p>
-                </div>
-                <div class="cp-top-box">
-                  <div>13DDQ001</div>
-                  <p>
-                    <span>电镀件区</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="large-row-pass ">
-              <span class="pass">通</span>
-              <span class="pass">道</span>
-            </div>
-            <div class="cp-bd">
-              <div class="cp-bd-col1">
-                <div class="row bd-row1" >
-                  <div   class="item" v-for="item in cpRow1" :key="item.code" :style="{backgroundColor:item.color}">{{item.code}}</div>
-                </div>
-                <div class="row bd-row2" >
-                  <div  class="item" v-for="item in cpRow2" :key="item.code" :style="{backgroundColor:item.color}">{{item.code}}</div>
-                </div>
-                <div class="row bd-row3" >
-                  <div class="item"  v-for="item in cpRow3" :key="item.code" :style="{backgroundColor:item.color}">{{item.code}}</div>
-                </div>
-                <div class="row bd-row4" >
-                  <div class="item"  v-for="item in cpRow4" :key="item.code" :style="{backgroundColor:item.color,borderTopWidth:item.code?'1px':'0',borderBottomWidth:item.color?'1px':'0'}">{{item.code}}</div>
-                </div>
-              </div>
-              <div class="cp-bd-col2">
-                <div class="card" v-for="(value,key) in tableList" :key="key">
-                  <div class="card-item item" v-for="item in value" :key="item.code">
-                    {{item.code}}
+                  <div class="cp-top-col2">
+                    <div :class="['cp-top-box','col-center-flex', 'position','cursor',item.code]"  v-for="item in positionData.cpTopCol2" :key="item.code" @click="()=>{openProModal(item.code)}">
+                      <div>{{item.code}}</div>
+                      <p>
+                        <span>{{item.name}}</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div class="large-row-pass cp-content-pass " >
+                  <span class="pass">通</span>
+                  <span class="pass">道</span>
+                </div>
+                <div class="cp-bd row-flex">
+                  <div class="cp-bd-col1 col-flex">
+                    <div class="row"  v-for="(v,k) in positionData.cpBdPosition" :key="k">
+                      <div  :class="['item','position',item.code,item.code=='储物柜'||!item.code?'special-item':'']" v-for="item in v" :key="item.code" 
+                      :style="{borderTopWidth:item.code?'1px':'0'}"  
+                      @click="()=>{openProModal(item.code)}">{{item.code}}</div>
+                    </div>
+                  </div>
+                  <div class="cp-bd-col2">
+                    <div class="card" v-for="(value,key) in positionData.tableList" :key="key">
+                      <div :class="['position','card-item','item',item.code]" v-for="item in value" :key="item.code"  @click="()=>{openProModal(item.code)}" 
+                        >
+                        {{item.code}}
+                      </div>
+                    </div>
 
-              </div>
+                  </div>
+                </div>
             </div>
-            <div class="large-row-pass ">
-              <span class="pass">通</span>
-              <span class="pass">道</span>
-            </div>
-        </div>
-        <div class="col-pass">
-          <span>通</span>
-          <span>道</span>
-        </div>
-        <div class="right-panel">
-          <div class="rp-box">
-            <div class="rp-row rp-row1">
-              <span>04MJZ001</span><br>
-              <span>车加工半成品</span>
-            </div>
-            <div class="rp-row rp-row2">
-              <div class="rp-row2-top">
-                <span>09GJK</span><br>
-                <span>焊丝存放区</span>
-              </div>
-              <div class="rp-row2-bt">
-                <span>04DHL001</span><br>
-                <span>电焊物料分拣存放区</span>
-              </div>
+            <div class="col-pass width6">
+              <span>通</span>
+              <span>道</span>
             </div>
           </div>
-          <div class="item-box" v-for="(item,index) in [1,2,3,4,5]" :key="index">
-            <div class="item" v-for="item in rpList" :key="item.code">{{item.code}}</div>
+          <div class="large-row-pass lp-pass row-center-flex" >
+            <span class="pass">通</span>
+            <span class="pass">道</span>
           </div>
-          <div class="rp-saveBox">
-            <div>13DJQ051 待检塑料件存放区</div>
-            <div>13DJQ052 待检塑料件存放区</div>
-            <div>13DJQ053 待检塑料件存放区</div>
-            <div :style="{borderBottomWidth:'0'}">13DJQ054 待检塑料件存放区</div>
+          <div class="left-content-bt">
+            <span>剪袋子</span>
+            <span>IQC办公室</span>
+            <span>仓库办公室</span>
+          </div>
+        </div>
+        <div class="right-panel col-flex">
+          <div class="rp-content-top col-flex">
+            <div class="rp-box col-flex">
+              <div class="rp-row rp-row1 col-center-flex position 04MJZ001">
+                <span>{{positionData.rpTopList.rpTopRow1[0].code}}</span><br>
+                <span>{{positionData.rpTopList.rpTopRow1[0].name}}</span>
+              </div>
+              <div class="rp-row rp-row2 col-flex ">
+                <div :class="['position','row-center-flex',item.code]" v-for="item in positionData.rpTopList.rpTopRow2" :key="item.code">
+                  <span>{{item.code}}</span><br>
+                  <span>{{item.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="large-row-pass rp-content-pass " >
+            </div>
+            <div class="rp-item-content col-flex">
+              <div class="item-box" v-for="(v,k) in positionData.rpList" :key="k" >
+                <div :class="['row-center-flex','item',item.code,'position']" 
+                v-for="item in v" :key="item.code" 
+                @click="()=>{openProModal(item.code)}">
+                  {{item.code}}
+                </div>
+              </div>
+            </div>
+            <div class="rp-saveBox">
+              <div  :class="[item.code, 'cursor','position','row-center-flex']" v-for="item in  positionData.rpBottom" :key="item.code"  
+              @click="()=>{openProModal(item.code)}">
+                {{item.code}} {{item.name}}
+              </div>
+            </div>  
+          </div>
+          <div class="large-row-pass rp-pass" >
+          </div>
+          <div class="rp-content-bt row-center-flex position 04WXJ001">
+            外协件周转区 04WXJ001
           </div>
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="ft-left">
-        <span>剪袋子</span>
-        <span>IQC办公室</span>
-        <span>仓库办公室</span>
-      </div>
-      <div class="ft-right">
-        外协件周转区04WXJ001
-      </div>
-    </div>
+    <searchModal v-if="searchIsOpen" :searchIsOpen="searchIsOpen" @closeSearch="closeSearchModal"></searchModal>
+    <siderModal v-if="siderIsOpen" :siderIsOpen="siderIsOpen" @closeSider="closeSiderModal"></siderModal>
+    <productModal v-if="productIsOpen" :productCode="productCode" :proInfo="proInfo" :productIsOpen="productIsOpen" @closePro="closeProModal"></productModal>
   </div>
 </template>
 <script>
 import headerTitle from "../layout/header";
+import searchModal from './components/searchModal';
+import siderModal from "./components/siderModal";
+import productModal from "./components/productModal";
+import axios from 'axios'
+import _ from 'lodash'
+let path = "http://172.16.8.55:49866/";
+
 export default {
+  created(){
+    this.searchIsOpen=false;
+    this.siderIsOpen=false;
+    this.productIsOpen=false;
+  },
   data(){
     return {
+      searchIsOpen:false,
+      siderIsOpen:false,
+      productIsOpen:false,
+      productCode:'',
+      //货位列表
+      positionList:{},
+      //货位明细
+      proInfo:[],
       col1List:[0,1,2,3,4,5],
-      cpColumn1:[
-        {
-          code:"13PLQ067",
-          name:"塑料件周转区"
-        },{
-          code:"13PLQ066",
-          name:"塑料件周转区"
-        },{
-          code:"13PLQ065",
-          name:"塑料件周转区"
-        },{
-          code:"13PLQ064",
-          name:"塑料件周转区"
-        },{
-          code:"13PLQ063",
-          name:"塑料件周转区"
-        },{
-          code:"13PLQ062",
-          name:"塑料件周转区"
-        }
-      ],
-      cpRow1:[
+      positionData:{
+        //临时周转 配装物料【0】
+        lpFtPosition:[
           {
-            code:"13PLQ053",
-            color:"default"
-          },
-          {
-            code:"13PLQ054",
-            color:"default"
-          },
-          {
-            code:"13PLQ055",
-            color:"#f71f4d"
-          },
-          {
-            code:"13PLQ056",
-            color:"#18348c"
-          },
-          {
-            code:"13PLQ057",
-            color:"default"
-          },
-          {
-            code:"13PLQ058",
-            color:"default"
-          },
-          {
-            code:"13PLQ059",
-            color:"default"
-          },
-          {
-            code:"13PLQ060",
-            color:"default"
-          },
-          {
-            code:"13PLQ061",
-            color:"default"
+            code:"13PLQ068",
+            name:"临时周转区",
+            remark:"(导杆顶块木箱类)"
           },{
-            code:"13PLQ044",
-            color:"default"
-          },
-          {
-            code:"13PLQ045",
-            color:"default"
-          },
-          {
-            code:"13PLQ046",
-            color:"default"
-          },{
-            code:"13PLQ047",
-            color:"default"
-          },
-          {
-            code:"13PLQ048",
-            color:"default"
-          },
-          {
-            code:"13PLQ049",
-            color:"default"
-          },{
-            code:"13PLQ050",
-            color:"default"
-          },
-          {
-            code:"13PLQ051",
-            color:"default"
-          },
-          {
-            code:"13PLQ052",
-            color:"default"
+            code:"13ZPL001",
+            name:"装配物料分拣区"
           }
         ],
-      cpRow2:[
+        //塑料件周转区【1】
+        cpTopCol1:[
           {
-            code:"13PLQ035",
-            color:"default"
-          },
-          {
-            code:"13PLQ036",
-            color:"default"
-          },
-          {
-            code:"13PLQ037",
-            color:"defalut"
-          },
-          {
-            code:"13PLQ038",
-            color:"defalut"
-          },
-          {
-            code:"13PLQ039",
-            color:"default"
-          },
-          {
-            code:"13PLQ040",
-            color:"default"
+            code:"13PLQ067",
+            name:"塑料件周转区"
           },{
-            code:"13PLQ041",
-            color:"default"
-          },
-          {
-            code:"13PLQ042",
-            color:"default"
-          },
-          {
-            code:"13PLQ043",
-            color:"default"
-          }
-        ],
-        cpRow3:[
-          {
-            code:"13PLQ026",
-            color:"default"
-          },
-          {
-            code:"13PLQ027",
-            color:"default"
-          },
-          {
-            code:"13PLQ028",
-            color:"#03dab9"
-          },
-          {
-            code:"13PLQ029",
-            color:"default"
-          },
-          {
-            code:"13PLQ030",
-            color:"default"
-          },
-          {
-            code:"13PLQ031",
-            color:"default"
+            code:"13PLQ066",
+            name:"塑料件周转区"
           },{
-            code:"13PLQ032",
-            color:"default"
-          },
-          {
-            code:"13PLQ033",
-            color:"default"
-          },
-          {
-            code:"13PLQ034",
-            color:"default"
-          },{
-            code:"13PLQ017",
-            color:"default"
-          },
-          {
-            code:"13PLQ018",
-            color:"default"
-          },
-          {
-            code:"13PLQ019",
-            color:"default"
-          },{
-            code:"13PLQ020",
-            color:"default"
-          },
-          {
-            code:"13PLQ021",
-            color:"default"
-          },
-          {
-            code:"13PLQ022",
-            color:"default"
-          },{
-            code:"13PLQ023",
-            color:"default"
-          },
-          {
-            code:"13PLQ024",
-            color:"default"
-          },
-          {
-            code:"13PLQ025",
-            color:"default"
-          }
-        ],  
-        cpRow4:[
-          {
-            code:"13PLQ009",
-            color:"default"
-          },
-          {
-            code:"13PLQ010",
-            color:"default"
-          },
-          {
-            code:"13PLQ011",
-            color:"#ffab03"
-          },
-          {
-            code:"13PLQ012",
-            color:"default"
-          },
-          {
-            code:"13PLQ013",
-            color:"default"
-          },
-          {
-            code:"13PLQ014",
-            color:"default"
-          },{
-            code:"13PLQ015",
-            color:"default"
-          },
-          {
-            code:"13PLQ016",
-            color:"default"
-          },
-          {
-            code:"储物柜",
-            color:""
-          },
-          {
-            code:"13PLQ001",
-            color:"default"
-          },{
-            code:"13PLQ002",
-            color:"default"
-          },
-          {
-            code:"13PLQ003",
-            color:"default"
-          },
-          {
-            code:"13PLQ004",
-            color:"default"
-          },{
-            code:"13PLQ005",
-            color:"default"
-          },
-          {
-            code:"13PLQ006",
-            color:"default"
-          },
-          {
-            code:"13PLQ007",
-            color:"default"
-          },{
-            code:"13PLQ008",
-            color:"default"
-          },
-          {
-            code:"",
-            color:""
-          },
-          {
             code:"13PLQ065",
-            color:"default"
-          },
-          {
+            name:"塑料件周转区"
+          },{
             code:"13PLQ064",
-            color:"default"
+            name:"塑料件周转区"
           },{
             code:"13PLQ063",
-            color:"default"
-          },
-          {
+            name:"塑料件周转区"
+          },{
             code:"13PLQ062",
-            color:"default"
-          },
+            name:"塑料件周转区"
+          }
+        ],
+        //不良品区 电镀件区【2】
+        cpTopCol2:[
           {
-            code:"13PLQ061",
-            color:"default"
+            code:"13BLP001",
+            name:"不良品区"
           },{
-            code:"13PLQ060",
-            color:"default"
-          },
+            code:"13DDQ001",
+            name:"电镀件区"
+          }
+        ],
+        //中间货位【3】
+        cpBdPosition:{
+          cpRow1:[
+            {
+              code:"13PLQ053",
+              
+            },{
+              code:"13PLQ054",
+              
+            },{
+              code:"13PLQ055"
+            },{
+              code:"13PLQ056",  
+            },{
+              code:"13PLQ057",              
+            },{
+              code:"13PLQ058",
+              
+            },{
+              code:"13PLQ059",
+              
+            },{
+              code:"13PLQ060",
+              
+            },{
+              code:"13PLQ061",
+              
+            },{
+              code:"13PLQ044",
+              
+            },{
+              code:"13PLQ045",
+              
+            },{
+              code:"13PLQ046",
+              
+            },{
+              code:"13PLQ047",
+              
+            },{
+              code:"13PLQ048",
+              
+            },{
+              code:"13PLQ049",
+              
+            },{
+              code:"13PLQ050",
+              
+            },{
+              code:"13PLQ051",
+              
+            },{
+              code:"13PLQ052",
+              
+            }
+          ],
+          cpRow2:[
+            {
+              code:"13PLQ035",
+              
+            },
+            {
+              code:"13PLQ036",
+              
+            },
+            {
+              code:"13PLQ037",
+              color:"defalut"
+            },
+            {
+              code:"13PLQ038",
+              color:"defalut"
+            },
+            {
+              code:"13PLQ039",
+              
+            },
+            {
+              code:"13PLQ040",
+              
+            },{
+              code:"13PLQ041",
+              
+            },
+            {
+              code:"13PLQ042",
+              
+            },
+            {
+              code:"13PLQ043",
+              
+            }
+          ],
+          cpRow3:[
+              {
+                code:"13PLQ026"
+              },
+              {
+                code:"13PLQ027"
+              },
+              {
+                code:"13PLQ028"
+              },
+              {
+                code:"13PLQ029",
+                
+              },
+              {
+                code:"13PLQ030",
+                
+              },
+              {
+                code:"13PLQ031",
+                
+              },{
+                code:"13PLQ032",
+                
+              },
+              {
+                code:"13PLQ033",
+                
+              },
+              {
+                code:"13PLQ034",
+                
+              },{
+                code:"13PLQ017",
+                
+              },
+              {
+                code:"13PLQ018",
+                
+              },
+              {
+                code:"13PLQ019",
+                
+              },{
+                code:"13PLQ020",
+                
+              },
+              {
+                code:"13PLQ021",
+                
+              },
+              {
+                code:"13PLQ022",
+                
+              },{
+                code:"13PLQ023",
+                
+              },
+              {
+                code:"13PLQ024",
+                
+              },
+              {
+                code:"13PLQ025",
+                
+              }
+          ],  
+          cpRow4:[
+              {
+                code:"13PLQ009",
+                
+              },
+              {
+                code:"13PLQ010",
+                
+              },
+              {
+                code:"13PLQ011",
+                color:"#ffab03"
+              },
+              {
+                code:"13PLQ012",
+                
+              },
+              {
+                code:"13PLQ013",
+                
+              },
+              {
+                code:"13PLQ014",
+                
+              },{
+                code:"13PLQ015",
+                
+              },
+              {
+                code:"13PLQ016",
+                
+              },
+              {
+                code:"储物柜",
+                color:""
+              },
+              {
+                code:"13PLQ001",
+                
+              },{
+                code:"13PLQ002",
+                
+              },
+              {
+                code:"13PLQ003",
+                
+              },
+              {
+                code:"13PLQ004",
+                
+              },{
+                code:"13PLQ005",
+                
+              },
+              {
+                code:"13PLQ006",
+                
+              },
+              {
+                code:"13PLQ007",
+                
+              },{
+                code:"13PLQ008",
+                
+              },
+              {
+                code:"",
+                color:""
+              },
+              {
+                code:"13PLQ065",
+                
+              },
+              {
+                code:"13PLQ064",
+                
+              },{
+                code:"13PLQ063",
+                
+              },
+              {
+                code:"13PLQ062",
+                
+              },
+              {
+                code:"13PLQ061",
+                
+              },{
+                code:"13PLQ060",
+                
+              },
+              {
+                code:"13PLQ059",
+                
+              },
+              {
+                code:"13PLQ058",
+                
+              },{
+                code:"13PLQ057",
+                
+              },
+          ],
+        },
+        //右侧顶部货位
+        rpTopList:{
+          rpTopRow1:[
+            {
+              code:'04MJZ001',
+              name:'车加工半成品'
+            }
+          ],
+          rpTopRow2:[
+            {
+              code:'09GJK',
+              name:'焊丝存放区'
+            },{
+              code:'04DHL001',
+              name:'电焊物料分拣存放区'
+            }
+          ]
+        },
+        //DJQ货位 【4】
+        tableList:{
+          card1:[
+            {
+              code:"13DJQ020"
+            },
+            {
+              code:"13DJQ019"
+            },
+            {
+              code:"13DJQ018"
+            },
+            {
+              code:"13DJQ017"
+            }
+          ],
+          card2:[
+            {
+              code:"13DJQ016"
+            },
+            {
+              code:"13DJQ015"
+            },
+            {
+              code:"13DJQ014"
+            },
+            {
+              code:"13DJQ013"
+            }
+          ],
+          card3:[
+            {
+              code:"13DJQ012"
+            },
+            {
+              code:"13DJQ011"
+            },
+            {
+              code:"13DJQ010"
+            },
+            {
+              code:"13DJQ009"
+            }
+          ],
+          card4:[
+            {
+              code:"13DJQ008"
+            },
+            {
+              code:"13DJQ007"
+            },
+            {
+              code:"13DJQ006"
+            },
+            {
+              code:"13DJQ005"
+            }
+          ],
+          card5:[
+            {
+              code:"13DJQ004"
+            },
+            {
+              code:"13DJQ003"
+            },
+            {
+              code:"13DJQ002"
+            },
+            {
+              code:"13DJQ001"
+            },
+            {
+              code:"13DJQ056"
+            },
+            {
+              code:"13DJQ055"
+            }
+          ]
+        },
+        //PLQ货位【5】
+        rpList:{
+          rpListRow1:[
+            {
+              // code:"13A01001"
+              code:"13PLQ021"
+            },
+            {
+              code:"13PLQ022"
+            },{
+              code:"13PLQ023"
+            },{
+              code:"13PLQ024"
+            },{
+              code:"13PLQ025"
+            },{
+              code:"13PLQ026"
+            },
+          ],
+          rpListRow2:[
+            {
+              code:"13PLQ027"
+            },
+            {
+              code:"13PLQ028"
+            },{
+              code:"13PLQ029"
+            },{
+              code:"13PLQ030"
+            },{
+              code:"13PLQ031"
+            },{
+              code:"13PLQ032"
+            },
+          ],
+          rpListRow3:[
+            {
+              code:"13PLQ033"
+            },
+            {
+              code:"13PLQ034"
+            },{
+              code:"13PLQ035"
+            },{
+              code:"13PLQ036"
+            },{
+              code:"13PLQ037"
+            },{
+              code:"13PLQ038"
+            },
+          ],
+          rpListRow4:[
+            {
+              code:"13PLQ039"
+            },
+            {
+              code:"13PLQ040"
+            },{
+              code:"13PLQ041"
+            },{
+              code:"13PLQ042"
+            },{
+              code:"13PLQ043"
+            },{
+              code:"13PLQ044"
+            }
+          ],
+          rpListRow5:[
+            {
+              code:"13PLQ045"
+            },
+            {
+              code:"13PLQ046"
+            },{
+              code:"13PLQ047"
+            },{
+              code:"13PLQ048"
+            },{
+              code:"13PLQ049"
+            },{
+              code:"13PLQ050"
+            }
+          ]
+        },
+        //待检塑料件存放区【6】
+        rpBottom:[
           {
-            code:"13PLQ059",
-            color:"default"
-          },
-          {
-            code:"13PLQ058",
-            color:"default"
+            code:"13DJQ051",
+            name:"待检塑料件存放区",
           },{
-            code:"13PLQ057",
-            color:"default"
+            code:"13DJQ052",
+            name:"待检塑料件存放区",
+          },{
+            code:"13DJQ053",
+            name:"待检塑料件存放区",
+          },{
+            code:"13DJQ054",
+            name:"待检塑料件存放区",
           },
-        ],
-      tableList:{
-        card1:[
-          {
-            code:"13DJQ020"
-          },
-          {
-            code:"13DJQ019"
-          },
-          {
-            code:"13DJQ018"
-          },
-          {
-            code:"13DJQ017"
-          }
-        ],
-        card2:[
-          {
-            code:"13DJQ016"
-          },
-          {
-            code:"13DJQ015"
-          },
-          {
-            code:"13DJQ014"
-          },
-          {
-            code:"13DJQ013"
-          }
-        ],
-        card3:[
-          {
-            code:"13DJQ012"
-          },
-          {
-            code:"13DJQ011"
-          },
-          {
-            code:"13DJQ010"
-          },
-          {
-            code:"13DJQ009"
-          }
-        ],
-        card4:[
-          {
-            code:"13DJQ008"
-          },
-          {
-            code:"13DJQ007"
-          },
-          {
-            code:"13DJQ006"
-          },
-          {
-            code:"13DJQ005"
-          }
-        ],
-        card5:[
-          {
-            code:"13DJQ004"
-          },
-          {
-            code:"13DJQ003"
-          },
-          {
-            code:"13DJQ002"
-          },
-          {
-            code:"13DJQ001"
-          },
-          {
-            code:"13DJQ056"
-          },
-          {
-            code:"13DJQ055"
-          }
         ]
-      },
-      rpList:[
-        {
-          code:"13PLQ021"
-        },
-        {
-          code:"13PLQ022"
-        },{
-          code:"13PLQ023"
-        },{
-          code:"13PLQ024"
-        },{
-          code:"13PLQ025"
-        },{
-          code:"13PLQ026"
-        },
-      ]
-    }
+      }
+    }   
   },
   components:{
-    headerTitle
+    headerTitle,
+    searchModal,
+    siderModal,
+    productModal
+  },
+  mounted(){
+    this.getPositionList()     
+  },
+  methods:{
+    setColor(value){
+      let colorObj={
+        0:'nullColor',
+        1:'notNullColor',
+        2:'strangeColor'
+      }
+      return colorObj[value];
+    },
+    //获取货物明细
+    getPositionInfo(code){
+      // axios.get(path+"api/warehouse/positionInfo?position=13N07128")
+      axios.get(path+"api/warehouse/positionInfo?position="+code)
+      .then((res)=>{
+          this.proInfo=_.cloneDeep(res.data.Data.data)
+      })
+      .then(()=>{
+        this.productCode=code
+        this.productIsOpen=true;
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+    },
+    //获取货位
+    getPositionList(){
+      axios.get(path+"api/warehouse/positionList?workorderno&erp&componentno&venname&aorderno&status")
+      .then((res)=>{
+          this.positionList=_.cloneDeep(res.data.Data.data)
+          console.log('获取货位==>',this.positionList)
+          this.updatePosition()
+        //每1min更新一次货位
+        this.timer=setInterval(()=>{
+          this.updatePosition()
+        },60*1000)
+        })
+      .catch((err)=>{
+        console.log(err)
+      })
+    },
+    //更新货位状态
+    updatePosition(){
+      let test={}
+      _.map(this.positionData,(item,key)=>{           
+        if(Object.prototype.toString.call(item)=='[object Array]'){
+          this.setStatus(item)
+        }else{
+          _.map(item,(i)=>{
+            this.setStatus(i)
+          })
+        }
+        test[key]=item
+      })
+      this.positionData=test;
+    },
+    //设置货位状态
+    setStatus(item){
+      _.forEach(item,(i)=>{
+        let status= this.checkStatus(i.code) 
+        i.status=status;
+        //货位状态
+        let ele=document.getElementsByClassName(i.code)
+        let colorClass=this.setColor(status)
+        _.forEach(ele,(dom)=>{
+          dom.classList.add(colorClass)
+        })
+      })
+    },
+    //检查现有货位与后台返回的货位是否一致
+    checkStatus(code){
+      //默认为空
+      let result=0;
+      for(let k in this.positionList){
+        if(k==code){
+          result= this.positionList[k].status
+        }
+      }
+      return result
+    },
+    // 打开搜索框
+    openSearch(){
+      this.searchIsOpen=true;
+    },
+    // 关闭搜索框
+    closeSearchModal(data){
+      this.searchIsOpen=data;
+    },
+    // 打开侧边栏
+    openSider(){
+      this.siderIsOpen=true;
+    },
+    // 关闭侧边栏
+    closeSiderModal(data){
+      this.siderIsOpen=data;
+    },
+    //打开货物明细
+    openProModal(code){
+      if(code!=='储物柜'&&code){
+        this.proInfo=[]
+        this.getPositionInfo(code)
+        // this.productCode=code
+        // this.productIsOpen=true;
+      }
+
+    },
+    //关闭货物明细
+    closeProModal(data){
+      this.productIsOpen=data;
+    }
+  },
+  beforeDestroy(){
+    clearInterval(this.timer)
   }
 }
 </script>
@@ -564,220 +821,340 @@ $border:1px solid #0267c5;
   padding-top: 70px;
   height: 100%;
   background: radial-gradient(#010e34, #001454);
+  min-width: 1680px;
 }
-
-.body {
-  padding: 0 20px;
-  position: relative;
-  height: calc(100vh - 160px);
-}
+// 顶部侧边栏及搜索
 .sider{
   height: 30px;
   margin-bottom: 10px;
+  display:flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  .sider-right{
+    display: flex;
+    align-items: center;
+    .color-box{
+      display: flex;
+      align-items: center;
+      color: #fff;
+      .color-item{
+        width: 15px;
+        height: 15px;
+        margin:0 10px;
+      }
+    }
+    .search{
+      width: 20px;
+      height: 20px;
+      margin: 0 20px;
+    }
+  }
 }
+//主体
+.body {
+  padding: 0 20px;
+  position: relative;
+  height: calc(100vh - 100px);
+  min-height: 870px;
+}
+//面板主要内容
 .panel-content{
-  display: flex;
   text-align: center;
   color: #fff;
-  // height: 100%;
   justify-content: space-between;
+  height: 100%;
+}
+// 左侧区域
+.left-content{
+  width: 72%;
+  height: 100%;
+  .left-content-top{
+    width: 100%;
+    height: 89%;
+  }
+  .lp-pass{
+    width: 1000px;
+    height: 4%;
+    margin-left: 20%;
+  }
+
+  .left-content-bt{
+    height: 5%;
+    width: 94%;
+    border: $border;
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+}
+.width6{
+  width: 6% !important;
 }
 .left-panel{
-  display: flex;
-  height: calc(100vh - 200px);
-
+  width: 14%;
   .lp-col1{
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    width: 100%;
     .c1-top{
-      .save-box{
-        width: 180px;
-        height: 55px;
-        line-height: 55px;
-        border:$border;
-      }     
+      width: 100%;
+      height: 60%;
+      .c1-top-box{
+        flex: 1px;
+        .save-box{
+          width: 100%;
+          height: 60%;
+          border:$border;
+        }    
+        .row-pass{
+          height: 40px !important;
+        }
+      }
     }
     .c1-ft{
-      margin:20px 0;
+      height: 40%;
+      overflow: hidden;
       .c1-ft-box{
         border:$border;
-        width: 180px;
-        padding:40px 0;
-        min-height: 160px;
-        div{
-          margin-bottom:8px;
-        }
+        height: 50%;
       }
     }
   }
 }
 .center-panel{
-  height: calc(100vh - 200px);
+  justify-content: space-between;
+  width: 74%;
   .cp-top{
-    display: flex;
+    width: 100%;
+    height: 40%;
+    justify-content: space-between;
+    overflow: hidden;
     .cp-top-col1{
-      width: 810px;
-      .turnover-box{
-        border:$border;
-        height: 38px;
-        line-height: 40px;
-        span{
-          margin-right: 10px;
-        }          
-      } 
+      width: 74%;
+      height: 100%;
+      .cp-top-col1-box{
+        height: calc(100% / 6);
+        .turnover-box{
+          border:$border;
+          height: 60%;
+          span{
+            margin-right: 10px;
+          }          
+        } 
+      }
+      
     }
     .cp-top-col2{
-        margin-left: 10px;
         border:$border;
-        width: 180px;
+        border-bottom:none;
+        width: 25%;
+        height: 93.5%;
         .cp-top-box{
-          display: flex;
           height: 50%;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        .cp-top-box1{
           border-bottom: $border;
         }
     }
   }
-  .cp-bd{
-      display: flex;
+  .cp-content-pass{
+    height: 3%;
+    margin-top: -20px;
   }
-  .cp-bd-col1{
-      width: 810px;
+  .cp-bd{
+    height: 57%;
+    overflow: hidden;
+    justify-content: space-between;
+    .cp-bd-col1{
+      width: 74%;
       height: 100%;
+      justify-content: space-between;
+      .row{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+          .item{
+            width: calc(100% / 9);
+            height: 40px;
+          }
+          //储物柜
+          .special-item{
+            cursor:default;
+            border-bottom-width: 0;
+            background-color: transparent !important;
+            padding-top: 40px;
+          }
+        }
+      }
+    }
+    .cp-bd-col2{
+      width: 25%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    .row{
-      display: flex;
-      flex-wrap: wrap;
+      margin-left: 10px;
+      .card{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        .item{
+          width: 50%;
+          min-height: 40px;
+        }
       }
-    }
-  }
-  .cp-bd-col2{
-    width: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-left: 10px;
-
-    .card{
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
     }
   }
 
 .right-panel{
-  height: calc(100vh - 200px);
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  width: 28%;
+  height: 100%;
+  .rp-content-top{
+    width: 100%;
+    height: 89%;
+  }
+  .rp-pass{
+    height: 4%;
+  }
+  .rp-content-bt{
+    width: 100%;
+    height: 5%;
+    border: $border;
+  }
 }
 .rp-box{
-  height: 333px;
-  margin-bottom: 30px;
+  height: 37.5%;
+  justify-content: space-between;
+  .rp-row{
+    border: $border;
+  }
+  .rp-row1{
+    height: 35%;
+  }
+  .rp-row2{
+    height: 60%;
+    justify-content: space-around;
+    div{
+      height: 50%;
+    }
+  }
 }
-.rp-row{
-  border: $border;
-  width: 540px;
+.rp-content-pass{
+  height: 5.5%;
+}
 
-}
-.rp-row1{
-  height: 35%;
-  margin-bottom: 16px;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.rp-row2{
-  height: 60%;
-  display:flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.item-box{
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-
+.rp-item-content{
+  height: 37%;
+  .item-box{
+    flex:1;
+    display: flex;
+    flex-wrap: wrap;
+    .item{
+      flex: 1;
+      height: 50%;
+    }
+  }
 }
 .rp-saveBox{
   border:$border;
+  height: 20%;
+  border-bottom: none;
   div{
     border-bottom: $border;
-    line-height: 24px;
+    height: 25%;
   }
 }
-.ft-right{
-    width: 540px;
-    height: 50px;
-    border: $border;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
-.footer{
-  padding: 0 20px;
-  color: #fff;
+
+/* 通用属性 */
+//空的颜色
+.nullColor{
+  background-color: #10276d;
+}
+//非空的颜色
+.notNullColor{
+  background-color: #f71f4d;
+}
+//异常的颜色
+.strangeColor{
+  background-color: #ffab03;
+}
+//横向flex
+.row-flex{
   display: flex;
-  justify-content: space-between;
-  width: 100vw;
-  margin-top: 20px;
-  .ft-left{
-    width: 1260px;
-
-    height: 50px;
-    border: $border;
-    display:flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 20px;
-  }
-  
 }
+//横向居中flex
+.row-center-flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+//纵向flex
+.col-flex{
+  display: flex;
+  flex-direction: column;
+}
+//纵向居中flex
+.col-center-flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+//竖着的过道
 .col-pass{
   width: 50px;
-  height:calc(100vh - 200px);
+  height:calc(100vh - 220px);
   text-align: center;
   display: flex;
   flex-direction: column;
   span{
-    // flex:1;
+    flex:1;
     padding-top: 150px;
     color: #fff;
     font-size: 20px;
   }
 }
-
+//横着的过道
 .row-pass{
   .pass{
-    margin: 0 10px;
+    margin:0 20px;
     font-size: 14px;
   }
 }
+//大的横通道
 .large-row-pass{
   width: 1000px;
   display: flex;
   justify-content: space-around;
+  color:#fff;
   .pass{
     height: 30px;
     line-height: 30px;
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 
+//单元格
 .item{
   box-sizing: border-box;
   border:$border;
-  width: 90px;
-  height: 38px;
-  line-height: 38px;
   text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.item:hover,
+div.cursor:hover{
+  background-color:#203c96 !important;
+}
+//指针
+.cursor{
+  cursor: pointer;
+}
+.heart{
+    animation:heart  0.6s forwards infinite ;
+}
+
+@keyframes heart {
+  0% {opacity:0;}
+  100%{opacity:1;}
 }
 </style>

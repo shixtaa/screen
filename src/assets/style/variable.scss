@@ -1,0 +1,21 @@
+// element-ui 表格样式
+.el-table tbody tr:hover>td { 
+  background-color:rgba(255,255,255,0.3)!important
+}
+.el-table td,.el-table th {
+  text-align: center !important;
+  border: none;
+}
+
+.el-table--border, .el-table--group{
+  border: none;
+}
+.el-table--border::after, .el-table--group::after{
+  width: 0;
+}
+.customer-table::before{
+  width: 0;
+}
+.customer-table .el-table__fixed-right::before,.el-table__fixed::before{
+  width: 0;
+}
