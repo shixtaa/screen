@@ -1,22 +1,7 @@
 <template>
   <div class="layout">
     <header-title></header-title>
-    <div class="sider">
-      <img class="cursor" src="../../assets/imgs/sider.png" alt="sider" @click="openSider">
-      <div class="sider-right">
-        <div class="color-box">
-          <div class="color-item  nullColor " ></div>
-          <span>空</span>
-          <div class="color-item  notNullColor" ></div>
-          <span>非空</span>
-          <div class="color-item  strangeColor" ></div>
-          <span>异常</span>
-        </div>
-        <div class="search">
-          <img  class="search cursor" src="../../assets/imgs/search.png" alt="search" @click="openSearch">
-        </div>
-      </div>
-    </div>
+    <Sider @openSearch="openSearchModal" @openSider="openSiderModal"></Sider>
     <div class="body">
       <div class="panel-content row-flex">
         <div class="left-content col-flex">
@@ -115,12 +100,14 @@
         <div class="right-panel col-flex">
           <div class="rp-content-top col-flex">
             <div class="rp-box col-flex">
-              <div class="rp-row rp-row1 col-center-flex position 04MJZ001">
+              <div class="rp-row rp-row1 col-center-flex position 04MJZ001 cursor"  @click="()=>{openProModal('04MJZ001')}">
                 <span>{{positionData.rpTopList.rpTopRow1[0].code}}</span><br>
                 <span>{{positionData.rpTopList.rpTopRow1[0].name}}</span>
               </div>
               <div class="rp-row rp-row2 col-flex ">
-                <div :class="['position','row-center-flex',item.code]" v-for="item in positionData.rpTopList.rpTopRow2" :key="item.code">
+                <div :class="['position','row-center-flex','cursor',item.code]" 
+                v-for="item in positionData.rpTopList.rpTopRow2" :key="item.code"
+                @click="()=>{openProModal(item.code)}" >
                   <span>{{item.code}}</span><br>
                   <span>{{item.name}}</span>
                 </div>
@@ -158,7 +145,9 @@
   </div>
 </template>
 <script>
+import "./screenEight.scss"
 import headerTitle from "../layout/header";
+import Sider from '../layout/sider'
 import searchModal from './components/searchModal';
 import siderModal from "./components/siderModal";
 import productModal from "./components/productModal";
@@ -693,6 +682,7 @@ export default {
   },
   components:{
     headerTitle,
+    Sider,
     searchModal,
     siderModal,
     productModal
@@ -780,16 +770,16 @@ export default {
       return result
     },
     // 打开搜索框
-    openSearch(){
-      this.searchIsOpen=true;
+    openSearchModal(data){
+      this.searchIsOpen=data;
     },
     // 关闭搜索框
     closeSearchModal(data){
       this.searchIsOpen=data;
     },
     // 打开侧边栏
-    openSider(){
-      this.siderIsOpen=true;
+    openSiderModal(data){
+      this.siderIsOpen=data;
     },
     // 关闭侧边栏
     closeSiderModal(data){
@@ -800,8 +790,6 @@ export default {
       if(code!=='储物柜'&&code){
         this.proInfo=[]
         this.getPositionInfo(code)
-        // this.productCode=code
-        // this.productIsOpen=true;
       }
 
     },
@@ -815,346 +803,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-$border:1px solid #0267c5;
-.layout {
-  padding-top: 70px;
-  height: 100%;
-  background: radial-gradient(#010e34, #001454);
-  min-width: 1680px;
-}
-// 顶部侧边栏及搜索
-.sider{
-  height: 30px;
-  margin-bottom: 10px;
-  display:flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  .sider-right{
-    display: flex;
-    align-items: center;
-    .color-box{
-      display: flex;
-      align-items: center;
-      color: #fff;
-      .color-item{
-        width: 15px;
-        height: 15px;
-        margin:0 10px;
-      }
-    }
-    .search{
-      width: 20px;
-      height: 20px;
-      margin: 0 20px;
-    }
-  }
-}
-//主体
-.body {
-  padding: 0 20px;
-  position: relative;
-  height: calc(100vh - 100px);
-  min-height: 870px;
-}
-//面板主要内容
-.panel-content{
-  text-align: center;
-  color: #fff;
-  justify-content: space-between;
-  height: 100%;
-}
-// 左侧区域
-.left-content{
-  width: 72%;
-  height: 100%;
-  .left-content-top{
-    width: 100%;
-    height: 89%;
-  }
-  .lp-pass{
-    width: 1000px;
-    height: 4%;
-    margin-left: 20%;
-  }
-
-  .left-content-bt{
-    height: 5%;
-    width: 94%;
-    border: $border;
-    display:flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-}
-.width6{
-  width: 6% !important;
-}
-.left-panel{
-  width: 14%;
-  .lp-col1{
-    justify-content: space-between;
-    width: 100%;
-    .c1-top{
-      width: 100%;
-      height: 60%;
-      .c1-top-box{
-        flex: 1px;
-        .save-box{
-          width: 100%;
-          height: 60%;
-          border:$border;
-        }    
-        .row-pass{
-          height: 40px !important;
-        }
-      }
-    }
-    .c1-ft{
-      height: 40%;
-      overflow: hidden;
-      .c1-ft-box{
-        border:$border;
-        height: 50%;
-      }
-    }
-  }
-}
-.center-panel{
-  justify-content: space-between;
-  width: 74%;
-  .cp-top{
-    width: 100%;
-    height: 40%;
-    justify-content: space-between;
-    overflow: hidden;
-    .cp-top-col1{
-      width: 74%;
-      height: 100%;
-      .cp-top-col1-box{
-        height: calc(100% / 6);
-        .turnover-box{
-          border:$border;
-          height: 60%;
-          span{
-            margin-right: 10px;
-          }          
-        } 
-      }
-      
-    }
-    .cp-top-col2{
-        border:$border;
-        border-bottom:none;
-        width: 25%;
-        height: 93.5%;
-        .cp-top-box{
-          height: 50%;
-          border-bottom: $border;
-        }
-    }
-  }
-  .cp-content-pass{
-    height: 3%;
-    margin-top: -20px;
-  }
-  .cp-bd{
-    height: 57%;
-    overflow: hidden;
-    justify-content: space-between;
-    .cp-bd-col1{
-      width: 74%;
-      height: 100%;
-      justify-content: space-between;
-      .row{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-          .item{
-            width: calc(100% / 9);
-            height: 40px;
-          }
-          //储物柜
-          .special-item{
-            cursor:default;
-            border-bottom-width: 0;
-            background-color: transparent !important;
-            padding-top: 40px;
-          }
-        }
-      }
-    }
-    .cp-bd-col2{
-      width: 25%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-left: 10px;
-      .card{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        .item{
-          width: 50%;
-          min-height: 40px;
-        }
-      }
-    }
-  }
-
-.right-panel{
-  width: 28%;
-  height: 100%;
-  .rp-content-top{
-    width: 100%;
-    height: 89%;
-  }
-  .rp-pass{
-    height: 4%;
-  }
-  .rp-content-bt{
-    width: 100%;
-    height: 5%;
-    border: $border;
-  }
-}
-.rp-box{
-  height: 37.5%;
-  justify-content: space-between;
-  .rp-row{
-    border: $border;
-  }
-  .rp-row1{
-    height: 35%;
-  }
-  .rp-row2{
-    height: 60%;
-    justify-content: space-around;
-    div{
-      height: 50%;
-    }
-  }
-}
-.rp-content-pass{
-  height: 5.5%;
-}
-
-.rp-item-content{
-  height: 37%;
-  .item-box{
-    flex:1;
-    display: flex;
-    flex-wrap: wrap;
-    .item{
-      flex: 1;
-      height: 50%;
-    }
-  }
-}
-.rp-saveBox{
-  border:$border;
-  height: 20%;
-  border-bottom: none;
-  div{
-    border-bottom: $border;
-    height: 25%;
-  }
-}
-
-
-/* 通用属性 */
-//空的颜色
-.nullColor{
-  background-color: #10276d;
-}
-//非空的颜色
-.notNullColor{
-  background-color: #f71f4d;
-}
-//异常的颜色
-.strangeColor{
-  background-color: #ffab03;
-}
-//横向flex
-.row-flex{
-  display: flex;
-}
-//横向居中flex
-.row-center-flex{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-//纵向flex
-.col-flex{
-  display: flex;
-  flex-direction: column;
-}
-//纵向居中flex
-.col-center-flex{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-//竖着的过道
-.col-pass{
-  width: 50px;
-  height:calc(100vh - 220px);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  span{
-    flex:1;
-    padding-top: 150px;
-    color: #fff;
-    font-size: 20px;
-  }
-}
-//横着的过道
-.row-pass{
-  .pass{
-    margin:0 20px;
-    font-size: 14px;
-  }
-}
-//大的横通道
-.large-row-pass{
-  width: 1000px;
-  display: flex;
-  justify-content: space-around;
-  color:#fff;
-  .pass{
-    height: 30px;
-    line-height: 30px;
-    font-size: 18px;
-  }
-}
-
-//单元格
-.item{
-  box-sizing: border-box;
-  border:$border;
-  text-align: center;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.item:hover,
-div.cursor:hover{
-  background-color:#203c96 !important;
-}
-//指针
-.cursor{
-  cursor: pointer;
-}
-.heart{
-    animation:heart  0.6s forwards infinite ;
-}
-
-@keyframes heart {
-  0% {opacity:0;}
-  100%{opacity:1;}
-}
-</style>

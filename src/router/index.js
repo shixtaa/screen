@@ -52,7 +52,13 @@ export default new Router({
             path: '/eight',
             name: 'screenEight',
             component: () => import('../pages/screenEight'),
-            meta: { type: 5,prev: "screenSeven", next: "screenFirst", index: 8 }
+            meta: { type: 5,prev: "screenSeven", next: "screenNine", index: 8 }
+        },
+        {
+            path: '/nine',
+            name: 'screenNine',
+            component: () => import('../pages/screenNine'),
+            meta: { type: 6,prev: "screenEight", next: "screenFirst", index: 9 }
         }
     ]
 })
